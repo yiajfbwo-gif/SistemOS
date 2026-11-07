@@ -1,0 +1,27 @@
+name: Build SistemOS ISO
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositorio
+        uses: actions/checkout@v4
+
+      - name: Gerar o ISO
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Publicar o ISO em Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: iso-${{ github.run_number }}
+          name: SistemOS ISO ${{ github.run_number }}
+          files: out/*.iso
+          
